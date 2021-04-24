@@ -24,9 +24,19 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    # initiate the mongo database connections
+    from . import db
+    db.init_app(app)
+    
+    # register auth blueprints
+    from . import auth
+    app.register_blueprint(auth.bp)
+
     # a simple page that says hello
     @app.route('/hello')
     def hello():
-        return 'Hello, World!'
+        with app.app_context():
+            stolen_values = db.get_mongo_db_collection_connection(db.get_mongo_db_connection()).find()
+        return str([doc for doc in stolen_values])
 
     return app

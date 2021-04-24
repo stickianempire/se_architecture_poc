@@ -4,7 +4,7 @@ import sqlite3
 from flask import current_app, g
 from flask_pymongo import PyMongo
 
-def get_mongo_db_connection(connection_url=current_app.config['MONGO_DB_URL'], db_name=current_app.config['MONGO_DB_STICKIAN_EMPIRE']):
+def get_mongo_db_connection(connection_url="mongodb://localhost:27017/stickian_empire_db", db_name="stickian_empire_db"):
     """Fetches the Mongo DB connection
     
     :param connection_url: is the connection URL of the database 
@@ -17,13 +17,7 @@ def get_mongo_db_connection(connection_url=current_app.config['MONGO_DB_URL'], d
         g.mongo_db = client[db_name]
     return g.mongo_db
 
-def close_mongo_db_connection():
-    """Closes the Mongo DB database connection. """
-    mongo_db = g.pop('mongo_db', None)
-    if mongo_db is not None:
-        mongo_db.close()
-
-def get_mongo_db_collection_connection(db_connection, collection_name=current_app.config['PLAYER_DATA_COLLECTION']):
+def get_mongo_db_collection_connection(db_connection, collection_name="player_data"):
     """Fetches the a Mongo DB collection connection variables out of the EXISTING collections
 
     :param db_connection: the connection to the MongoDB database
@@ -36,3 +30,7 @@ def get_mongo_db_collection_connection(db_connection, collection_name=current_ap
         return db_connection[collection_name]
     raise ValueError("Inexistant collection of name {0} at DB {1}.".format(collection_name, db_connection.name))
 
+def init_app(app):
+    """To ensure context actions are added to the app."""
+    with app.app_context():
+        get_mongo_db_connection()
