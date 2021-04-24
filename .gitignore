@@ -29,3 +29,6 @@ venv.bak/
 
 # Flask related 
 instance/
+
+# Custom
+tmp/
