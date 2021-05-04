@@ -3,8 +3,6 @@ from . import auth, db
 
 bp = Blueprint('home', __name__, url_prefix='/')
 
-#@auth.login_required
-@bp.route('/hello')
+@bp.route('/')
 def hello():
-    stolen_values = db.get_mongo_db_collection_connection(db.get_mongo_db_connection()).find()
-    return str([doc for doc in stolen_values])
+    return  render_template('base.html')
