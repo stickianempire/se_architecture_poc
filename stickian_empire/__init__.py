@@ -29,10 +29,7 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
 
     # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        with app.app_context():
-            stolen_values = db.get_mongo_db_collection_connection(db.get_mongo_db_connection()).find()
-        return str([doc for doc in stolen_values])
+    from . import home
+    app.register_blueprint(home.bp)
 
     return app
