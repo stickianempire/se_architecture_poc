@@ -4,5 +4,5 @@ from . import auth, db
 bp = Blueprint('home', __name__, url_prefix='/')
 
 @bp.route('/')
-def hello():
-    return  render_template('base.html')
+def home():
+    return  render_template('game/home.html')

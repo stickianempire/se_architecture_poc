@@ -1,2 +1,0 @@
-# generic configurations
-DEBUG=True
