@@ -4,9 +4,6 @@
 {% block content %}
   <div class="login-form">
     <h1>{% block title %}Register{% endblock %}</h1>
-    {% for message in get_flashed_messages() %}
-      <div class="flash">{{ message }}</div>
-    {% endfor %}
     <form method="post">
       <label for="username">Username</label>
       <input name="username" id="username" required>
@@ -16,5 +13,8 @@
       <input type="password" name="cpassword" id="cpassword" required>
       <input type="submit" value="Register">
     </form>
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
   </div>
 {% endblock %}

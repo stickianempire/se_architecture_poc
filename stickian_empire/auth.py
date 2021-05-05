@@ -50,7 +50,7 @@ def register():
         elif users_collection.find_one({"username": username}) is not None:
             error = 'User {} is already registered.'.format(username)
         elif not is_password_strong(password):
-            error = ['Week password, must include', 'At least 8 characters', 'At least one number', 'At least one letter']
+            error = 'Week password'
 
         if error is None:
             users_collection.insert_one({
