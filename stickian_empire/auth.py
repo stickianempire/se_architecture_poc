@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from stickian_empire.db import get_mongo_db_connection, get_mongo_db_collection_connection
-# from bson.objectid import ObjectId
+from bson.objectid import ObjectId
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route('/login', methods=('GET', 'POST'))
@@ -59,6 +59,15 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+
+    if user_id is None:
+        g.user = None
+    else:
+        users_collection = get_mongo_db_collection_connection(get_mongo_db_connection(), "stickian_empire_db", "user_login")
+        g.user = users_collection.find_one({"_id": ObjectId(user_id)})
 
 def login_required(view):
     """Decorator for login_required"""
