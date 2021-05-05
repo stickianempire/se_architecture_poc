@@ -1,5 +1,22 @@
-html {
-    font-family: monospace;
-    text-align: left;
-    padding-left: 1cm;
-}
+/* generic theme */
+html { font-family: monospace;}
+h1 { color: #000; margin: 20px;}
+a { color: #377ba8; text-decoration: none;}
+    a:hover { background-color: #fff; text-decoration: none;}
+form { margin: 10px 0; display: flex; flex-direction: column;}
+
+/* generic classes */   
+.flash { margin: 10px 0; padding: 10px; background: #daa; border: 1px solid #f00; }
+
+/* nav bar*/
+nav { background: lightgray; display: flex; align-items: center; padding: 0 0.5rem; }
+nav h1 { flex: auto; margin: 0; }
+nav h1 a { text-decoration: none; padding: 0.25rem 0.5rem; }
+nav ul  { display: flex; list-style: none; margin: 0; padding: 0; }
+nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
+
+/* login form */
+.login-form {float: right; margin: 100px 200px; max-width: 300px; padding: 20px;}
+.login-form input {margin: 20px 0;}
+.login-form input[type=submit] { align-self: start; min-width: 10em; }
+
