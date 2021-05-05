@@ -1,3 +1,4 @@
+import functools
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from stickian_empire.db import get_mongo_db_connection, get_mongo_db_collection_connection
@@ -34,6 +35,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        confirm_password = request.form['cpassword']
         users_collection = get_mongo_db_collection_connection(get_mongo_db_connection(), "stickian_empire_db", "user_login")
         error = None
 
@@ -41,8 +43,14 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
+        elif not confirm_password:
+            error = 'Confirm the password.'
+        elif password != confirm_password:
+            error = 'Passwords do not match.'
         elif users_collection.find_one({"username": username}) is not None:
             error = 'User {} is already registered.'.format(username)
+        elif not is_password_strong(password):
+            error = ['Week password, must include', 'At least 8 characters', 'At least one number', 'At least one letter']
 
         if error is None:
             users_collection.insert_one({
@@ -67,7 +75,7 @@ def load_logged_in_user():
         g.user = None
     else:
         users_collection = get_mongo_db_collection_connection(get_mongo_db_connection(), "stickian_empire_db", "user_login")
-        g.user = users_collection.find_one({"_id": ObjectId(user_id)})
+        g.user = users_collection.find_one({"_id": ObjectId(user_id)}, {"username", "_id"})
 
 def login_required(view):
     """Decorator for login_required"""
@@ -77,3 +85,12 @@ def login_required(view):
             return redirect(url_for('auth.login'))
         return view(**kwargs)
     return wrapped_view
+
+def is_password_strong(password):
+    if len(password) < 8:
+        return False
+    if re.search(r"\d", password) is None:
+        return False
+    if re.search(r"[a-z]", password) is None and re.search(r"[A-Z]", password) is None:
+        return False
+    return True
