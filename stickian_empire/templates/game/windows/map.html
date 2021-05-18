@@ -1,0 +1,10 @@
+<p>map: {{ g.map_values }} this is going to be hard... my friend {{ g.user['username'] }}</p>
+{% for line in g.map_values %}
+    {% for cell in line %}
+        {% if cell %}
+            <p>Hit!</p>
+        {% else %}
+            <p>Miss!</p>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
