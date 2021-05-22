@@ -49,28 +49,30 @@ def register():
         password = request.form['password']
         confirm_password = request.form['cpassword']
         users_collection = get_mongo_db_collection_connection(get_mongo_db_connection(), "stickian_empire_db", "user_login")
-        error = None
+        errors = []
 
         if not username:
-            error = 'Username is required.'
+            errors.append('Username is required.')
         elif not password:
-            error = 'Password is required.'
+            errors.append( 'Password is required.')
         elif not confirm_password:
-            error = 'Confirm the password.'
-        elif password != confirm_password:
-            error = 'Passwords do not match.'
-        elif users_collection.find_one({"username": username}) is not None:
-            error = 'User {} is already registered.'.format(username)
-        elif not is_password_strong(password):
-            error = 'Week password'
+            errors.append( 'Confirm the password.')
+        else:
+            if password != confirm_password:
+                errors.append( 'Passwords do not match.')
+            if users_collection.find_one({"username": username}) is not None:
+                errors.append( 'User "{}" is already registered.'.format(username))
+            if not is_password_strong(password):
+                errors.append( 'Week password')
 
-        if error is None:
+        if not errors:
             users_collection.insert_one({
                 "username": username,
                 "password": generate_password_hash(password)
             })
             return redirect(url_for('auth.login'))
-        flash(error)
+        for error in errors:
+            flash(error)
 
     return render_template('auth/register.html')
 

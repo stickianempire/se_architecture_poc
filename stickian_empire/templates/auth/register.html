@@ -13,8 +13,14 @@
       <input type="password" name="cpassword" id="cpassword" required>
       <input type="submit" value="Register">
     </form>
-    {% for message in get_flashed_messages() %}
-      <div class="flash">{{ message }}</div>
-    {% endfor %}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
   </div>
 {% endblock %}
