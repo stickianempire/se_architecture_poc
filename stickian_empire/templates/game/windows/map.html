@@ -1,12 +1,12 @@
-<p>map: {{ g.map_values }} this is going to be hard... my friend {{ g.user['username'] }}</p>
+<p>This is a map given by the backend</p>
 <table>
-{% for line in g.map_values %}
+{% for line in map_values %}
     <tr>
     {% for cell in line %}
         {% if cell %}
-            <th>Hit!</th>
+            <th>x</th>
         {% else %}
-            <th>Miss!</th>
+            <th>o</th>
         {% endif %}
     {% endfor %}
     </tr>

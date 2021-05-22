@@ -20,3 +20,7 @@ nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 .login-form input {margin: 20px 0;}
 .login-form input[type=submit] { align-self: start; min-width: 10em; }
 
+/* icons */
+#swordsman-icon-20px {background-image: url(./imgs/test.png); width: 59px; height: 59px; background-position: 0px 0; background-repeat: no-repeat;}
+#bowman-icon-20px {background-image: url(./imgs/test.png); width: 59px; height: 59px; background-position: -59px 0; background-repeat: no-repeat;}
+#lancer-icon-20px {background-image: url(./imgs/test.png); width: 59px; height: 59px; background-position: -128px 0; background-repeat: no-repeat;}
