@@ -7,6 +7,12 @@ from bson.objectid import ObjectId
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
+    """Function to handle log in, handling the route for the get and the post method.
+    
+    :GET returns: login template
+    :POST returns: redirect to index if successful login
+    """
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -30,8 +36,14 @@ def login():
     # find a way to keep session
     return render_template('auth/login.html')
 
+
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
+    """Function to handle registering, handling the route for the get and the post method.
+    
+    :GET returns: register template
+    :POST returns: redirect for login page if successful registeration
+    """
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -64,11 +76,19 @@ def register():
 
 @bp.route('/logout')
 def logout():
+    """Function to handle logout, clearing the player session.
+    
+    :returns: redirect to index page
+    """
+
     session.clear()
     return redirect(url_for('index'))
 
 @bp.before_app_request
 def load_logged_in_user():
+    """Function to keep user id available in g for the request during the user session between app requests.
+    """
+
     user_id = session.get('user_id')
 
     if user_id is None:
@@ -78,7 +98,9 @@ def load_logged_in_user():
         g.user = users_collection.find_one({"_id": ObjectId(user_id)}, {"username", "_id"})
 
 def login_required(view):
-    """Decorator for login_required"""
+    """Decorator for login_required
+    """
+
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
@@ -87,6 +109,12 @@ def login_required(view):
     return wrapped_view
 
 def is_password_strong(password):
+    """Function to keep user id available in g for the request during the user session between app requests.
+
+    :params: password is the attempted password for registering
+    :returns: boolean weather the password is strong enough or not
+    """
+
     if len(password) < 8:
         return False
     if re.search(r"\d", password) is None:
