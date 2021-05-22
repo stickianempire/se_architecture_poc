@@ -1,4 +1,5 @@
 import functools
+import re
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from stickian_empire.db import get_mongo_db_connection, get_mongo_db_collection_connection
