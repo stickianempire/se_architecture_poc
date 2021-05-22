@@ -1,17 +1,11 @@
 {% extends 'base.html' %}
+{% block head %}
+<script src="{{ url_for('static', filename='scripts/loader.js') }}"></script>
+{% endblock %}
 
+{% block title %}Home page{% endblock %}
 {% block content %}
-<h1>{% block title %}Home page{% endblock %}</h1>
-<script>
-    async function fetchHtmlAsText(url) {
-        return await (await fetch(url)).text();
-    }
-
-    async function loadWindow(name) {
-        const contentDiv = document.getElementById("window");
-        contentDiv.innerHTML = await fetchHtmlAsText("game/windows/"+name);
-    }
-</script>
+<h1>Home</h1>
 <button onclick="loadWindow('profile')">Load Profile Test</button>
 <button onclick="loadWindow('map')">Load Map Test</button>
 <div id="window"></div>
