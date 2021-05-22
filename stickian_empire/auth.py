@@ -58,13 +58,16 @@ def register():
             errors.append( 'Password is required.')
         elif not confirm_password:
             errors.append( 'Confirm the password.')
-        else:
-            if password != confirm_password:
-                errors.append( 'Passwords do not match.')
-            if users_collection.find_one({"username": username}) is not None:
-                errors.append( 'User "{}" is already registered.'.format(username))
-            if not is_password_strong(password):
-                errors.append( 'Week password')
+        elif users_collection.find_one({"username": username}) is not None:
+            errors.append( 'User "{}" is already registered.'.format(username))
+        elif not is_password_strong(password):
+            errors.append( 'Password has to have:')
+            errors.append('- Eight or more characters')
+            errors.append('- At least one uppercase letter')
+            errors.append('- At least one lowercase letter')
+            errors.append('- At least one number')
+        elif password != confirm_password:
+            errors.append( 'Passwords do not match.')
 
         if not errors:
             users_collection.insert_one({
@@ -112,7 +115,7 @@ def login_required(view):
     return wrapped_view
 
 def is_password_strong(password):
-    """Function to keep user id available in g for the request during the user session between app requests.
+    """Function to ensure the password is strong enough throught regex expressions.
 
     :params: password is the attempted password for registering
     :returns: boolean weather the password is strong enough or not
